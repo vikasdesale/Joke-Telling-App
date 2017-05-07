@@ -22,9 +22,8 @@ class GCMAsyncTask extends AsyncTask<Context, Void, String> {
     @Override
     protected final String doInBackground(Context... context) {
         if(myApiService == null) {  // Only do this once
-            MyBackendJokes.Builder builder = new MyBackendJokes.Builder(AndroidHttp.newCompatibleTransport(),
-                    new AndroidJsonFactory(), null)
-                    .setRootUrl("http://10.0.2.2:8080/_ah/api/");
+            MyBackendJokes.Builder builder = new MyBackendJokes.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                    .setRootUrl("https://android-app-backend.appspot.com/_ah/api/");
             myApiService = builder.build();
         }
 
