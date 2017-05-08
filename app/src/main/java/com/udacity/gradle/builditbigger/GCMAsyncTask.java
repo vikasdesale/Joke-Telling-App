@@ -1,13 +1,11 @@
 package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.joketelling.application.backend.myBackendJokes.MyBackendJokes;
-import com.myandroidjokelibrary.android.MainActivity;
 
 import java.io.IOException;
 
@@ -18,7 +16,7 @@ import java.io.IOException;
 class GCMAsyncTask extends AsyncTask<Context, Void, String> {
     private static MyBackendJokes myApiService = null;
     private Context mContext;
-
+    public JokeReceivedListener jokeReceivedListener;
     @Override
     protected final String doInBackground(Context... context) {
         if(myApiService == null) {  // Only do this once
@@ -27,7 +25,7 @@ class GCMAsyncTask extends AsyncTask<Context, Void, String> {
             myApiService = builder.build();
         }
 
-        mContext = context[0];
+        jokeReceivedListener = (JokeReceivedListener) context[0];
         try {
             return myApiService.getJokes().execute().getData();
         } catch (IOException e) {
@@ -37,9 +35,11 @@ class GCMAsyncTask extends AsyncTask<Context, Void, String> {
 
     @Override
     protected void onPostExecute(String joke) {
-        Intent intent = new Intent(mContext, com.myandroidjokelibrary.android.MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(MainActivity.JOKE_KEY, joke);
-        mContext.startActivity(intent);
+        jokeReceivedListener.onJokeReceived(joke);
+    }
+
+    public interface JokeReceivedListener{
+       public void onJokeReceived(String joke);
+
     }
 }

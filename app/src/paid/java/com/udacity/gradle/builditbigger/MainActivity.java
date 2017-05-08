@@ -1,20 +1,25 @@
 package com.udacity.gradle.builditbigger;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.myjokesjava.android.MyJokes;
 
+import static com.myandroidjokelibrary.android.MainActivity.JOKE_KEY;
 
-public class MainActivity extends AppCompatActivity {
 
+public class MainActivity extends AppCompatActivity implements GCMAsyncTask.JokeReceivedListener {
+    private ProgressBar spinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        spinner = (ProgressBar)findViewById(R.id.progressBar1);
     }
 
 
@@ -41,14 +46,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(View view) {
+        spinner.setVisibility(View.VISIBLE);
         String joke = MyJokes.getMyJoke();
-      //  Intent intent = new Intent(this, com.myandroidjokelibrary.android.MainActivity.class);
-        //        intent.putExtra(com.myandroidjokelibrary.android.MainActivity.JOKE_KEY, joke);
-         //      startActivity(intent);
-      //  Toast.makeText(this, randomJoke, Toast.LENGTH_SHORT).show();
         new GCMAsyncTask().execute(this);
     }
 
 
-
+    @Override
+    public void onJokeReceived(String joke) {
+        spinner.setVisibility(View.GONE);
+        Intent intent = new Intent(MainActivity.this, com.myandroidjokelibrary.android.MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(JOKE_KEY, joke);
+        startActivity(intent);
+    }
 }
