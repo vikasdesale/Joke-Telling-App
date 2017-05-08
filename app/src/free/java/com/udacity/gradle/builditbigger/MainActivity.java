@@ -8,21 +8,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.myjokesjava.android.MyJokes;
+import com.google.android.gms.ads.InterstitialAd;
 
 import static com.myandroidjokelibrary.android.MainActivity.JOKE_KEY;
 
 
 public class MainActivity extends AppCompatActivity implements GCMAsyncTask.JokeReceivedListener {
     private ProgressBar spinner;
+    private InterstitialAd mInterstitialAd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         spinner = (ProgressBar)findViewById(R.id.progressBar1);
-        setUp();
     }
 
 
@@ -50,12 +51,29 @@ public class MainActivity extends AppCompatActivity implements GCMAsyncTask.Joke
 
     public void tellJoke(View view) {
         spinner.setVisibility(View.VISIBLE);
-        String joke = MyJokes.getMyJoke();
-      //  Intent intent = new Intent(this, com.myandroidjokelibrary.android.MainActivity.class);
-        //        intent.putExtra(com.myandroidjokelibrary.android.MainActivity.JOKE_KEY, joke);
-         //      startActivity(intent);
-      //  Toast.makeText(this, randomJoke, Toast.LENGTH_SHORT).show();
-        new GCMAsyncTask(this).execute();
+        setUp();
+        setUPInters();
+    }
+
+    private void setUPInters() {
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(this.getString(R.string.interstitial_ad_unit_id));
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                new GCMAsyncTask(MainActivity.this).execute();
+
+            }
+
+        });
+        new GCMAsyncTask(MainActivity.this).execute();
+
+        AdRequest ar = new AdRequest
+                .Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice("0123456789ABCDEF")
+                .build();
+        mInterstitialAd.loadAd(ar);
     }
 
     private void setUp() {
@@ -74,10 +92,14 @@ public class MainActivity extends AppCompatActivity implements GCMAsyncTask.Joke
 
     @Override
     public void onJokeReceived(String joke) {
-        spinner.setVisibility(View.GONE);
-        Intent intent = new Intent(MainActivity.this, com.myandroidjokelibrary.android.MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(JOKE_KEY, joke);
-        startActivity(intent);
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        }else {
+            spinner.setVisibility(View.GONE);
+            Intent intent = new Intent(MainActivity.this, com.myandroidjokelibrary.android.MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(JOKE_KEY, joke);
+            startActivity(intent);
+        }
     }
 }
