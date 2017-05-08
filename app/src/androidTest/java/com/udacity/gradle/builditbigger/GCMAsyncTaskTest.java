@@ -1,36 +1,29 @@
 package com.udacity.gradle.builditbigger;
 
-import android.support.test.runner.AndroidJUnit4;
+import android.test.AndroidTestCase;
 import android.util.Log;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import java.util.concurrent.ExecutionException;
-
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
 
 /**
  * Created by Dell on 5/7/2017.
  */
 
-@RunWith(AndroidJUnit4.class)
-public class GCMAsyncTaskTest {
+public class GCMAsyncTaskTest   extends AndroidTestCase {
 
     private static final String TAG = GCMAsyncTaskTest.class.getSimpleName();
 
-    public GCMAsyncTaskTest() {
-    }
 
-    @Test
-    public void executeMe() throws Exception {
+
+    @SuppressWarnings("unchecked")
+    public void test() throws Exception {
         GCMAsyncTask gcmAsyncTask = new GCMAsyncTask();
-        gcmAsyncTask.execute();
+        gcmAsyncTask.execute(getContext());
         try {
             String joke = gcmAsyncTask.get();
             assertNotNull(joke);
             assertTrue(joke.length() > 0);
+            Log.d("Please Check Joke :",""+joke);
          } catch (InterruptedException | ExecutionException e) {
              Log.e(TAG, Log.getStackTraceString(e));
         }

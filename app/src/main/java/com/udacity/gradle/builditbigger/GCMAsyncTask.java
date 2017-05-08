@@ -38,6 +38,7 @@ class GCMAsyncTask extends AsyncTask<Context, Void, String> {
     @Override
     protected void onPostExecute(String joke) {
         Intent intent = new Intent(mContext, com.myandroidjokelibrary.android.MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(MainActivity.JOKE_KEY, joke);
         mContext.startActivity(intent);
     }
