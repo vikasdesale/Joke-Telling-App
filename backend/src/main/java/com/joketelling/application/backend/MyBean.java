@@ -8,7 +8,7 @@ public class MyBean {
     private String myData;
 
     public MyBean(String myJoke) {
-        this.myData=myJoke;
+        this.myData = myJoke;
     }
 
     public String getData() {

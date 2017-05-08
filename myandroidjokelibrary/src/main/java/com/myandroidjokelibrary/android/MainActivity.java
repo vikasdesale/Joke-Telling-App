@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_lib);
         Intent intent =getIntent();
         String joke = intent.getStringExtra(JOKE_KEY);
-        TextView jokeTextView = (TextView)findViewById(R.id.jock_text);
+        TextView jokeTextView = (TextView)findViewById(R.id.jokeTextView);
         if (joke != null && joke.length() != 0) {
             jokeTextView.setText(joke);
         }

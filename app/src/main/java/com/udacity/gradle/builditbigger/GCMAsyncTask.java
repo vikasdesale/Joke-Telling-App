@@ -1,6 +1,5 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -17,16 +16,16 @@ import java.io.IOException;
 
 class GCMAsyncTask extends AsyncTask<Void, Void, String> {
     private static MyBackendJokes myApiService = null;
-    private Context mContext;
     public JokeReceivedListener jokeCallback;
 
     public GCMAsyncTask(JokeReceivedListener listener) {
         jokeCallback = listener;
     }
-    @Override
-    protected final String doInBackground(Void...voids) {
 
-        if(myApiService == null) {  // Only do this once
+    @Override
+    protected final String doInBackground(Void... voids) {
+
+        if (myApiService == null) {  // Only do this once
             MyBackendJokes.Builder builder = new MyBackendJokes.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
                     // options for running against local devappserver
@@ -60,7 +59,7 @@ class GCMAsyncTask extends AsyncTask<Void, Void, String> {
         }
     }
 
-    public interface JokeReceivedListener{
+    public interface JokeReceivedListener {
         void onJokeReceived(String joke);
 
     }

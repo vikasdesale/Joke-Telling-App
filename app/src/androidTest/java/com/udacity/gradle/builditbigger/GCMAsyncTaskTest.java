@@ -9,10 +9,9 @@ import java.util.concurrent.ExecutionException;
  * Created by Dell on 5/7/2017.
  */
 
-public class GCMAsyncTaskTest   extends AndroidTestCase {
+public class GCMAsyncTaskTest extends AndroidTestCase {
 
     private static final String TAG = GCMAsyncTaskTest.class.getSimpleName();
-
 
 
     @SuppressWarnings("unchecked")
@@ -23,9 +22,9 @@ public class GCMAsyncTaskTest   extends AndroidTestCase {
             String joke = gcmAsyncTask.get();
             assertNotNull(joke);
             assertTrue(joke.length() > 0);
-            Log.d("Please Check Joke :",""+joke);
-         } catch (InterruptedException | ExecutionException e) {
-             Log.e(TAG, Log.getStackTraceString(e));
+            Log.d("Please Check Joke :", "" + joke);
+        } catch (InterruptedException | ExecutionException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
         }
     }
 

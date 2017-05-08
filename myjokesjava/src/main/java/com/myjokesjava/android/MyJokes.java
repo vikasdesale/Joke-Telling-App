@@ -24,7 +24,7 @@ public class MyJokes {
             "I asked God for a bike, but I know God works in mysterious ways. So I stole a bike and asked for forgiveness.",
             "Teacher : \"Now, children, if I saw a man beating a donkey and stopped him,what virtue would I be showing?\"\n" +
                     "Student : \"Brotherly love\".\n",
-                };
+    };
     private static final Random random = new Random();
 
     public static String getMyJoke() {

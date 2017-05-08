@@ -8,18 +8,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.myjokesjava.android.MyJokes;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static com.myandroidjokelibrary.android.MainActivity.JOKE_KEY;
 
 
 public class MainActivity extends AppCompatActivity implements GCMAsyncTask.JokeReceivedListener {
-    private ProgressBar spinner;
+    @BindView(R.id.progressBar1)
+     ProgressBar spinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        spinner = (ProgressBar)findViewById(R.id.progressBar1);
+        ButterKnife.bind(this);
     }
 
 
@@ -47,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements GCMAsyncTask.Joke
 
     public void tellJoke(View view) {
         spinner.setVisibility(View.VISIBLE);
-        String joke = MyJokes.getMyJoke();
         new GCMAsyncTask(this).execute();
     }
 

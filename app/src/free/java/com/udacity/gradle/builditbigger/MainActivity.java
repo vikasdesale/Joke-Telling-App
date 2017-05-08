@@ -13,17 +13,25 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.myandroidjokelibrary.android.MainActivity.JOKE_KEY;
 
 
 public class MainActivity extends AppCompatActivity implements GCMAsyncTask.JokeReceivedListener {
-    private ProgressBar spinner;
+
     private InterstitialAd mInterstitialAd;
+    @BindView(R.id.progressBar1)
+    ProgressBar spinner;
+    @BindView(R.id.adView)
+    AdView mAdView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        spinner = (ProgressBar)findViewById(R.id.progressBar1);
+        ButterKnife.bind(this);
     }
 
 
@@ -51,11 +59,11 @@ public class MainActivity extends AppCompatActivity implements GCMAsyncTask.Joke
 
     public void tellJoke(View view) {
         spinner.setVisibility(View.VISIBLE);
-        setUp();
-        setUPInters();
+        setUpBannerAd();
+        setUPIntersAd();
     }
 
-    private void setUPInters() {
+    private void setUPIntersAd() {
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(this.getString(R.string.interstitial_ad_unit_id));
         mInterstitialAd.setAdListener(new AdListener() {
@@ -71,20 +79,19 @@ public class MainActivity extends AppCompatActivity implements GCMAsyncTask.Joke
         AdRequest ar = new AdRequest
                 .Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice("0123456789ABCDEF")
+                .addTestDevice(this.getString(R.string.deviceId))
                 .build();
         mInterstitialAd.loadAd(ar);
     }
 
-    private void setUp() {
-        AdView mAdView = (AdView)findViewById(R.id.adView);
+    private void setUpBannerAd() {
         // Create an ad request. Check logcat output for the hashed device ID to
         // get test ads on a physical device. e.g.
         // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
-        AdView adView = (AdView)this.findViewById(R.id.adView);
+        AdView adView = (AdView) this.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice("0123456789ABCDEF")
+                .addTestDevice(this.getString(R.string.deviceId))
                 .build();
         adView.loadAd(adRequest);
     }
@@ -94,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements GCMAsyncTask.Joke
     public void onJokeReceived(String joke) {
         if (mInterstitialAd.isLoaded()) {
             mInterstitialAd.show();
-        }else {
+        } else {
             spinner.setVisibility(View.GONE);
             Intent intent = new Intent(MainActivity.this, com.myandroidjokelibrary.android.MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
