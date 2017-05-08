@@ -13,19 +13,22 @@ import java.io.IOException;
  * Created by Dell on 5/7/2017.
  */
 
-class GCMAsyncTask extends AsyncTask<Context, Void, String> {
+class GCMAsyncTask extends AsyncTask<Void, Void, String> {
     private static MyBackendJokes myApiService = null;
     private Context mContext;
-    public JokeReceivedListener jokeReceivedListener;
+    public JokeReceivedListener jokeCallback;
+
+    public GCMAsyncTask(JokeReceivedListener listener) {
+        jokeCallback = listener;
+    }
     @Override
-    protected final String doInBackground(Context... context) {
+    protected final String doInBackground(Void...voids) {
         if(myApiService == null) {  // Only do this once
             MyBackendJokes.Builder builder = new MyBackendJokes.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                     .setRootUrl("https://stock-hawk-41c91.appspot.com/_ah/api/");
             myApiService = builder.build();
         }
 
-        jokeReceivedListener = (JokeReceivedListener) context[0];
         try {
             return myApiService.getJokes().execute().getData();
         } catch (IOException e) {
@@ -35,11 +38,13 @@ class GCMAsyncTask extends AsyncTask<Context, Void, String> {
 
     @Override
     protected void onPostExecute(String joke) {
-        jokeReceivedListener.onJokeReceived(joke);
+        if (jokeCallback != null) {
+            jokeCallback.onJokeReceived(joke);
+        }
     }
 
     public interface JokeReceivedListener{
-       public void onJokeReceived(String joke);
+        void onJokeReceived(String joke);
 
     }
 }

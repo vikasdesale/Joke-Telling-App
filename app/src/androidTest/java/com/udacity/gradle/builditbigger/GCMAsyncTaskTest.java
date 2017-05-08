@@ -17,8 +17,8 @@ public class GCMAsyncTaskTest   extends AndroidTestCase {
 
     @SuppressWarnings("unchecked")
     public void test() throws Exception {
-        GCMAsyncTask gcmAsyncTask = new GCMAsyncTask();
-        gcmAsyncTask.execute(getContext());
+        GCMAsyncTask gcmAsyncTask = new GCMAsyncTask(null);
+        gcmAsyncTask.execute();
         try {
             String joke = gcmAsyncTask.get();
             assertNotNull(joke);

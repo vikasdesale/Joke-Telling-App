@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements GCMAsyncTask.Joke
         //        intent.putExtra(com.myandroidjokelibrary.android.MainActivity.JOKE_KEY, joke);
          //      startActivity(intent);
       //  Toast.makeText(this, randomJoke, Toast.LENGTH_SHORT).show();
-        new GCMAsyncTask().execute(this);
+        new GCMAsyncTask(this).execute();
     }
 
     private void setUp() {

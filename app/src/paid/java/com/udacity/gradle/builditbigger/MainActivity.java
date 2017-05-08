@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements GCMAsyncTask.Joke
     public void tellJoke(View view) {
         spinner.setVisibility(View.VISIBLE);
         String joke = MyJokes.getMyJoke();
-        new GCMAsyncTask().execute(this);
+        new GCMAsyncTask(this).execute();
     }
 
 
